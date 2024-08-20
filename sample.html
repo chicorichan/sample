@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text-html;charset=Shift_JIS">
+  </head>
+<!-- 機能：アンケート回答データ収集 -->
+
+<!-- google検索除外タグ -->
+ <meta name="robots" Content="noindex,nofollow">
+
+ <title>アンケート回答データ収集</title>
+
+ <script lang="JavaScript">
+var bdown_cnt=0;  // 回答ボタン押下回数
+
+function errCheckText(){
+  var i=0;
+  var ckflg =false;
+
+  // フォームのエレメントタイプがテキストエリア、もしくはテキストフィールドの場合
+  // 入力値に「"」が設定されていたら警告
+　while(i<document.forms[0].length && ckflg == false){
+  if((document.forms[0].elemments[i].type == "text"
+    || document.forms[0].elements[i].type == "textarea")
+    && (document.forms[0].elements[i].value.indexOf('"',0)!=-1))
+      ckflg = true;
+    else
+      i++;
+  } 
+  return ckflg;
+}
+
+// セレクトフィールドで複数選択されたら警告
+function errCheckSelect(){
+  var i =0;
+  var j=0;
+  var selcnt = 0;
+  var ckflg =false;
+
+  // フォームのエレメントタイプがセレクトフィールドの場合
+  // 複数選択されていたら警告
+  while(i < document.forms[0].lendth && ckflg == false){
+    if(document.forms[0].elements[i].type == "select-multiple"){
+      selcnt = 0;
+      for(j=0;j<document.forms[0].elements[i].length;j++){
+        if(document.forms[0].elements[i].options[j].selected == true)
+          selcnt++;
+      }
+      if(selcnt > 1) ckflg = true;
+      else  i++;
+    }
+    else
+        i++;
+  }
+  return ckflg;
+}
+
+// 先頭フィールドに全フィールドを格納
+// （フィールド名flistからendまでのフィールド名を":"で区切る）
+function setFieldName(){
+  var i= 1;
+  var list = "";
+  while(i<document.forms[0].length
+          && document.forms[0].elements[i].name!="end"){
+      // 前フィールドと同じ名称の場合、及び
+      // フィールド名称が存在しない場合はリストに追加しない
+      if(document.forms[0].elements[i].name != document.forms[0].elements[i-1].name
+        && document.forms[0].elements[i].name !=""){
+        if (i>1)list +=":";
+        list +=document.forms[0].name;
+        }
+        i++;
+      }
+      document.forms[0].flist.value = list;
+}
+
+// カスタムエラーチェック
+</script>
+
+<body>
+  <form name="form1" method=post action="/ms1/ENQANSPEEqueteAnswerAction.do">
+<imput type="hidden" name="flist" value=""></imput>
+
+  </form>
+</body>
+
+
+</html>
